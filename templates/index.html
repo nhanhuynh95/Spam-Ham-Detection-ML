@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Detection UI</title>
+    <style>
+        body { font-family: sans-serif; padding: 50px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; }
+        #result { margin-top: 20px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <h2>Classify Spam Ham Email</h2>
+    <textarea id="emailText" placeholder="Typing email here..."></textarea><br>
+    <button id="btn">Predicted result</button>
+    <h3 id="result"></h3>
+
+    <script>
+        document.getElementById("btn").onclick = function() {
+            var text = document.getElementById("emailText").value;
+            console.log("Đang gửi:", text); // Kiểm tra trong Console
+            
+            fetch("/predict", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({text: text})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = "Predicted result: " + data.label;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error!";
+                console.error('Error:', error);
+            });
+        };
+    </script>
+</body>
+</html>
